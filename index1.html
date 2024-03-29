@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 200px;
+      background-color: #f0f0f0;
+    }
+
+    #slider-container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      max-width: 600px;
+      overflow: hidden;
+      background-color: rebeccapurple;
+    }
+    #slider {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .slide {
+      min-width: 100%;
+    }
+
+    #loading-line-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+        gap: 10px;
+    }
+
+    #prev-arrow, #next-arrow {
+      cursor: pointer;
+      font-size: 20px;
+        margin-left: 10px ;
+      color: #3498db;
+    }
+
+    #loading-line {
+      flex-grow: 1;
+      height: 5px;
+      background-color: #3498db;
+      transition: width 0.5s ease-in-out;
+    }
+
+    #slide-number {
+      position: absolute;
+      
+      bottom: 10px;
+
+
+      right: 10px;
+      font-size: 20px;
+      color: #3498db;
+    }
+
+    #prev-arrow {
+      margin-left: 10px;
+    }
+
+    #next-arrow {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="slider-container">
+  <div id="slider">
+    <div class="slide"><img src="https://images.unsplash.com/photo-1682686580036-b5e25932ce9a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxMXx8fGVufDB8fHx8fA%3D%3D" alt="Slide 1"></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1682686580036-b5e25932ce9a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxMXx8fGVufDB8fHx8fA%3D%3D" alt="Slide 2"></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1682686580036-b5e25932ce9a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxMXx8fGVufDB8fHx8fA%3D%3D" alt="Slide 3"></div>
+    <!-- Add more slides as needed -->
+  </div>
+  <div id="loading-line-container">
+    <div id="prev-arrow" onclick="prevSlide()">&lt;</div>
+    <div id="next-arrow" onclick="nextSlide()">&gt;</div>
+    <div id="loading-line"></div>
+    <div id="slide-number">1</div>
+  </div>
+  
+
+    
+</div>
+
+<script src="https://unpkg.com/gsap@3.9.0/dist/gsap.min.js"></script>
+<script>
+  const slider = document.getElementById('slider');
+  const loadingLine = document.getElementById('loading-line');
+  const slideNumber = document.getElementById('slide-number');
+  const totalSlides = document.querySelectorAll('.slide').length;
+  let currentIndex = 0;
+
+  function updateSlider() {
+    gsap.to(slider, { duration: 0.5, ease: 'power2.out', x: -currentIndex * 100 + '%' });
+    gsap.to(loadingLine, { duration: 0.5, ease: 'power2.out', width: (currentIndex + 1) / totalSlides * 100 + '%' });
+    slideNumber.textContent = currentIndex + 1;
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateSlider();
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    gsap.to(slider, { duration: 0.5, ease: 'power2.out', x: -currentIndex * 100 + '%' });
+    gsap.to(loadingLine, { duration: 0.5, ease: 'power2.out', width: currentIndex / totalSlides * 100 + '%' });
+    slideNumber.textContent = currentIndex + 1;
+  }
+
+  setInterval(nextSlide, 5000); // Auto slide every 5 seconds
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') {
+      prevSlide();
+    } else if (event.key === 'ArrowRight') {
+      nextSlide();
+    }
+  });
+</script>
+
+</body>
+</html>
